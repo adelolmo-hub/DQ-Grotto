@@ -3,9 +3,9 @@ package app.dqproject.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +29,11 @@ public class GrottoController {
 		return new ResponseEntity<List<GrottoMap>>(grottoService.allGrottos(), HttpStatus.OK);
 	}
 	
+	@GetMapping("{seed}")
+	public ResponseEntity<GrottoMap> getGrottoById(@PathVariable Integer seed){
+		return new ResponseEntity<GrottoMap>(grottoService.getById(seed), HttpStatus.OK);
+	}
+	
 	@PostMapping
 	public ResponseEntity<GrottoMap> createNewGrottoMap(@RequestBody GrottoMap grotto) {
 		return new ResponseEntity<GrottoMap>(grottoService.createGrotto(grotto), HttpStatus.OK);
@@ -38,4 +43,11 @@ public class GrottoController {
 	public ResponseEntity<GrottoMap> updateGrottoMap(@RequestBody GrottoMap grotto, @PathVariable Integer seed){
 		return new ResponseEntity<GrottoMap>(grottoService.updateGrotto(seed, grotto), HttpStatus.OK);
 	}
+	
+	@DeleteMapping("{seed}")
+	public ResponseEntity<String> deleteGrottoMap(@PathVariable Integer seed){
+		grottoService.deleteGrotto(seed);
+		return new ResponseEntity<String>("Grotto with seed " + seed + " deleted", HttpStatus.OK);
+	}
+	
 }
