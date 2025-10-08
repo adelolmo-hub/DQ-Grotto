@@ -1,9 +1,12 @@
 package app.dqproject.models;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -26,6 +29,7 @@ public class GrottoMap {
 	private String name;
 	private int level;
 	private String boss;
+	private String rank;
 	private String link;
 	@JsonSerialize(using = IntToHexSerializer.class)
 	@JsonDeserialize(using = HexToIntDeserializer.class)
@@ -35,6 +39,8 @@ public class GrottoMap {
 	private int metalKingFloor;
 	private String type;
 	private int floors;
+	@Transient
+	private Monster monsters;
 	
 	
 	
