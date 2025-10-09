@@ -1,7 +1,7 @@
 package app.dqproject.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -14,6 +14,8 @@ import com.mongodb.client.result.UpdateResult;
 
 import app.dqproject.exceptions.EntityNotFoundException;
 import app.dqproject.models.GrottoMap;
+import app.dqproject.models.Monster;
+import app.dqproject.models.MonsterEntry;
 import app.dqproject.repository.IGrottoRepository;
 
 @Service
@@ -21,6 +23,9 @@ public class GrottoService {
 
 	@Autowired
 	private IGrottoRepository grottoRepository;
+	
+	@Autowired
+	private MonsterService monsterService;
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -45,6 +50,7 @@ public class GrottoService {
 	        .set("boss", grotto.getBoss())
 	        .set("link", grotto.getLink())
 	        .set("code", grotto.getCode())
+	        .set("rank", grotto.getRank())
 	        .set("chestA", grotto.getChestA())
 	        .set("chestS", grotto.getChestS())
 	        .set("metalKingFloor", grotto.getMetalKingFloor())
@@ -67,6 +73,21 @@ public class GrottoService {
 	}
 	
 	public GrottoMap getById(Integer seed) {
-		return grottoRepository.findById(seed).orElseThrow(() -> new EntityNotFoundException(seed));
+		GrottoMap grotto = grottoRepository.findById(seed).orElseThrow(() -> new EntityNotFoundException(seed));
+		Monster monster = monsterService.getMonstersByType(grotto.getType());
+		
+		String[] ranks = grotto.getRank().split("-");
+		
+		int minRank = Integer.parseInt(ranks[0]);
+		int maxRank = Integer.parseInt(ranks[1]);
+		
+		List<MonsterEntry> filtered = monster.getMonsterList().stream()
+		        .filter(m -> m.getRank() >= minRank && m.getRank() <= maxRank)
+		        .toList();
+		
+		monster.setMonsterList(filtered);
+		grotto.setMonsters(monster);
+		return grotto;
 	}
+	
 }
