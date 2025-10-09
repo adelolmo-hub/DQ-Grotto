@@ -1,13 +1,10 @@
 package app.dqproject.service;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -18,8 +15,8 @@ import com.mongodb.client.result.UpdateResult;
 import app.dqproject.exceptions.EntityNotFoundException;
 import app.dqproject.models.GrottoMap;
 import app.dqproject.models.Monster;
+import app.dqproject.models.MonsterEntry;
 import app.dqproject.repository.IGrottoRepository;
-import app.dqproject.repository.IMonstersRepository;
 
 @Service
 public class GrottoService {
@@ -77,21 +74,20 @@ public class GrottoService {
 	
 	public GrottoMap getById(Integer seed) {
 		GrottoMap grotto = grottoRepository.findById(seed).orElseThrow(() -> new EntityNotFoundException(seed));
-		Monster monster = monsterService.getMonster(grotto.getType());
+		Monster monster = monsterService.getMonstersByType(grotto.getType());
 		
-		int minRank = Integer.parseInt(grotto.getRank().split("-")[0]);
-		int maxRank = Integer.parseInt(grotto.getRank().split("-")[1]);
-		List<Object> monsters = new LinkedList<>();
-		for(Object object : monster.getMonsterList()) {
-			if(object instanceof Map) {
-				Map<String, Object> map = (Map<String, Object>) object;
-				if((Integer) map.get("rank") >= minRank && (Integer) map.get("rank") <= maxRank) {
-					monsters.add(map.get("monsters"));
-				}
-			}
-		}
-		monster.setMonsterList(monsters);
+		String[] ranks = grotto.getRank().split("-");
+		
+		int minRank = Integer.parseInt(ranks[0]);
+		int maxRank = Integer.parseInt(ranks[1]);
+		
+		List<MonsterEntry> filtered = monster.getMonsterList().stream()
+		        .filter(m -> m.getRank() >= minRank && m.getRank() <= maxRank)
+		        .toList();
+		
+		monster.setMonsterList(filtered);
 		grotto.setMonsters(monster);
 		return grotto;
 	}
+	
 }

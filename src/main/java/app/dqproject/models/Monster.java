@@ -24,7 +24,5 @@ public class Monster {
 	private ObjectId id;
 	@JsonIgnore
 	private String type;
-	private List<Object> monsterList;
-	
-	
+	private List<MonsterEntry> monsterList;
 }
