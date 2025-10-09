@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.dqproject.models.GrottoMap;
 import app.dqproject.service.GrottoService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/v1/grotto")
@@ -35,7 +36,7 @@ public class GrottoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<GrottoMap> createNewGrottoMap(@RequestBody GrottoMap grotto) {
+	public ResponseEntity<GrottoMap> createNewGrottoMap(@Valid @RequestBody GrottoMap grotto) {
 		return new ResponseEntity<GrottoMap>(grottoService.createGrotto(grotto), HttpStatus.OK);
 	}
 	
