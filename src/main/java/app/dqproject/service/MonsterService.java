@@ -12,7 +12,7 @@ public class MonsterService {
 	@Autowired
 	private IMonstersRepository monstersRepository;
 	
-	public Monster getMonster(String type) {
+	public Monster getMonstersByType(String type) {
 		return monstersRepository.findByType(type).orElseThrow(() -> new EntityNotFoundException(1234));
 	}
 }
