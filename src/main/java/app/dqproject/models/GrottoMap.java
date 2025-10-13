@@ -1,7 +1,5 @@
 package app.dqproject.models;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -41,16 +39,29 @@ public class GrottoMap {
 	@Pattern(regexp = "^[0-9]{1,2}-[0-9]{1,2}$", message = "Invalid range format. Expected format: 'number-number' (e.g., '7-10').")
 	private String rank;
 	
-	
+	@Pattern(regexp = "^https:\\/\\/[\\w-]+\\.[a-zA-Z]{2,}\\/[a-zA-Z0-9/.?=-_&%]+$", message = "Invalid format. Link must be an URL")
 	private String link;
+	
 	@JsonSerialize(using = IntToHexSerializer.class)
 	@JsonDeserialize(using = HexToIntDeserializer.class)
-	private int code;
-	private int chestA;
-	private int chestS;
-	private int metalKingFloor;
+	@NotNull(message = "Code can't be blank")
+	private Integer code;
+	
+	@NotNull(message = "ChestA can't be blank")
+	private Integer chestA;
+	
+	@NotNull(message = "ChestS can't be blank")
+	private Integer chestS;
+	
+	@NotNull(message = "Metal king floor can't be blank")
+	private Integer metalKingFloor;
+	
+	@NotBlank(message = "Type can't be blank")
 	private String type;
-	private int floors;
+	
+	@NotNull(message = "Floors can't be blank")
+	private Integer floors;
+	
 	@Transient
 	private Monster monsters;
 	

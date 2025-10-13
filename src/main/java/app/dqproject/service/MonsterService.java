@@ -1,5 +1,7 @@
 package app.dqproject.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ public class MonsterService {
 	@Autowired
 	private IMonstersRepository monstersRepository;
 	
-	public Monster getMonstersByType(String type) {
-		return monstersRepository.findByType(type).orElseThrow(() -> new EntityNotFoundException(1234));
+	public Optional<Monster> getMonstersByType(String type) {
+		return monstersRepository.findByType(type);
 	}
 }
