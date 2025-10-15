@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.dqproject.models.GrottoMap;
 import app.dqproject.service.GrottoService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/api/v1/grotto")
@@ -29,18 +30,23 @@ public class GrottoController {
 		return new ResponseEntity<List<GrottoMap>>(grottoService.allGrottos(), HttpStatus.OK);
 	}
 	
-	@GetMapping("{seed}")
+	@GetMapping("/id/{seed}")
 	public ResponseEntity<GrottoMap> getGrottoById(@PathVariable Integer seed){
 		return new ResponseEntity<GrottoMap>(grottoService.getById(seed), HttpStatus.OK);
 	}
 	
+	@GetMapping("/name/{boss}")
+	public ResponseEntity<List<GrottoMap>> getGrottoByBoss(@PathVariable String boss){
+		return new ResponseEntity<List<GrottoMap>>(grottoService.getByBoss(boss), HttpStatus.OK);
+	}
+	
 	@PostMapping
-	public ResponseEntity<GrottoMap> createNewGrottoMap(@RequestBody GrottoMap grotto) {
+	public ResponseEntity<GrottoMap> createNewGrottoMap(@Valid @RequestBody GrottoMap grotto) {
 		return new ResponseEntity<GrottoMap>(grottoService.createGrotto(grotto), HttpStatus.OK);
 	}
 	
 	@PutMapping("{seed}")
-	public ResponseEntity<GrottoMap> updateGrottoMap(@RequestBody GrottoMap grotto, @PathVariable Integer seed){
+	public ResponseEntity<GrottoMap> updateGrottoMap(@Valid @RequestBody GrottoMap grotto, @PathVariable Integer seed){
 		return new ResponseEntity<GrottoMap>(grottoService.updateGrotto(seed, grotto), HttpStatus.OK);
 	}
 	
