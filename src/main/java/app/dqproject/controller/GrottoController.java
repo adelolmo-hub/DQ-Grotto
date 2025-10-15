@@ -30,9 +30,14 @@ public class GrottoController {
 		return new ResponseEntity<List<GrottoMap>>(grottoService.allGrottos(), HttpStatus.OK);
 	}
 	
-	@GetMapping("{seed}")
+	@GetMapping("/id/{seed}")
 	public ResponseEntity<GrottoMap> getGrottoById(@PathVariable Integer seed){
 		return new ResponseEntity<GrottoMap>(grottoService.getById(seed), HttpStatus.OK);
+	}
+	
+	@GetMapping("/name/{boss}")
+	public ResponseEntity<List<GrottoMap>> getGrottoByBoss(@PathVariable String boss){
+		return new ResponseEntity<List<GrottoMap>>(grottoService.getByBoss(boss), HttpStatus.OK);
 	}
 	
 	@PostMapping
@@ -41,7 +46,7 @@ public class GrottoController {
 	}
 	
 	@PutMapping("{seed}")
-	public ResponseEntity<GrottoMap> updateGrottoMap(@RequestBody GrottoMap grotto, @PathVariable Integer seed){
+	public ResponseEntity<GrottoMap> updateGrottoMap(@Valid @RequestBody GrottoMap grotto, @PathVariable Integer seed){
 		return new ResponseEntity<GrottoMap>(grottoService.updateGrotto(seed, grotto), HttpStatus.OK);
 	}
 	

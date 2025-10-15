@@ -83,6 +83,15 @@ public class GrottoService {
 		
 		return grotto;
 	}
+	
+	public List<GrottoMap> getByBoss(String boss) {
+		List<GrottoMap> grottoList = grottoRepository.findAllByBoss(boss);
+		for(GrottoMap grotto : grottoList) {
+			getFilteredMonsterList(grotto);
+		}
+		
+		return grottoList;
+	}
 
 	private GrottoMap getFilteredMonsterList(GrottoMap grotto) {
 		
