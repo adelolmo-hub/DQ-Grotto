@@ -11,4 +11,5 @@ import app.dqproject.models.GrottoMap;
 public interface IGrottoRepository extends MongoRepository<GrottoMap, Integer>{
 	@Query("{'boss': {$regex: ?0, $options: 'i'} }")
 	List<GrottoMap> findAllByBoss(String boss);
+	List<GrottoMap> findAllByUserId(String userId);
 }

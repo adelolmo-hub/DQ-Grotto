@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.dqproject.dto.GrottoMapDTO;
 import app.dqproject.models.GrottoMap;
 import app.dqproject.service.GrottoService;
 import jakarta.validation.Valid;
@@ -26,8 +27,8 @@ public class GrottoController {
 	private GrottoService grottoService;
 	
 	@GetMapping
-	public ResponseEntity<List<GrottoMap>> getAllGrotos() {
-		return new ResponseEntity<List<GrottoMap>>(grottoService.allGrottos(), HttpStatus.OK);
+	public ResponseEntity<List<GrottoMapDTO>> getAllGrotos() {
+		return new ResponseEntity<List<GrottoMapDTO>>(grottoService.allGrottos(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/id/{seed}")

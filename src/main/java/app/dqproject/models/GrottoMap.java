@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GrottoMap {
 
-	@JsonSerialize(using = IntToHexSerializer.class)
 	@JsonDeserialize(using = HexToIntDeserializer.class)
 	@Id
 	private Integer seed;
@@ -42,7 +41,6 @@ public class GrottoMap {
 	@Pattern(regexp = "^https:\\/\\/[\\w-]+\\.[a-zA-Z]{2,}\\/[a-zA-Z0-9/.?=-_&%]+$", message = "Invalid format. Link must be an URL")
 	private String link;
 	
-	@JsonSerialize(using = IntToHexSerializer.class)
 	@JsonDeserialize(using = HexToIntDeserializer.class)
 	@NotNull(message = "Code can't be blank")
 	private Integer code;
@@ -64,6 +62,8 @@ public class GrottoMap {
 	
 	@Transient
 	private Monster monsters;
+	
+	private String userId;
 	
 	
 	

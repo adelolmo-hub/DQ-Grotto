@@ -8,15 +8,20 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.client.result.UpdateResult;
 
+import app.dqproject.dto.GrottoMapDTO;
 import app.dqproject.exceptions.EntityNotFoundException;
 import app.dqproject.models.GrottoMap;
 import app.dqproject.models.Monster;
 import app.dqproject.models.MonsterEntry;
 import app.dqproject.repository.IGrottoRepository;
+import app.dqproject.utils.AuthUtils;
+import app.dqproject.utils.GrottoMapper;
 
 @Service
 public class GrottoService {
@@ -30,19 +35,28 @@ public class GrottoService {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
-	public List<GrottoMap> allGrottos(){
-		List<GrottoMap> grottoList = grottoRepository.findAll();
+	@Autowired
+	private GrottoMapper mapper;
+	
+	public List<GrottoMapDTO> allGrottos(){
+		String userId = AuthUtils.getCurrentUserId();
+		List<GrottoMap> grottoList = grottoRepository.findAllByUserId(userId);
+		
 		for(GrottoMap grotto : grottoList) {
 			getFilteredMonsterList(grotto);
 		}
 		
-		return grottoList;
+		List<GrottoMapDTO> grottoDTOList = mapper.toDTOList(grottoList); 
+		
+		return grottoDTOList;
 	}
 	
 	public GrottoMap createGrotto(GrottoMap grotto) {
 		if(grottoRepository.existsById(grotto.getSeed())) {
 			throw new IllegalStateException("This grotto already exists. Seed = " + grotto.getSeed());
 		}
+		String userId = AuthUtils.getCurrentUserId();
+		grotto.setUserId(userId);
 		return grottoRepository.save(grotto);
 	}
 	
